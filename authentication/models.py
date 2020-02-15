@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
+from management.models import Speciality
 
 User = get_user_model()
 
@@ -25,12 +26,12 @@ class CustomerProfile(models.Model):
 class ChefProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='chef_profile')
     phone = models.CharField(max_length=11)
-    percentage = models.FloatField()
+    percentage = models.FloatField(null=True)
     rating = models.FloatField(default=0.0)
     votes_count = models.IntegerField(default=0)
     status = models.CharField(choices=PROFILE_STATUS, default='PENDING', max_length=10)
     amount_due = models.FloatField(default=0)
-    # TODO: Add specialities
+    specialities = models.ManyToManyField(Speciality)
 
     def __str__(self):
         return self.user.first_name
