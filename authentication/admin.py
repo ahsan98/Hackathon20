@@ -5,7 +5,7 @@ from management.models import Shift
 
 User = get_user_model()
 
-admin.site.unregister(User)
+# admin.site.unregister(User)
 
 
 class ShiftInline(admin.StackedInline):

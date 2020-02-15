@@ -25,7 +25,7 @@ SECRET_KEY = '1)i9_vmmtl9w_)4h5=sms#m)sfn@7$-!u_7k!3+f_gyf_(8!(k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.105.9.247']
 
 SITE_ID = 1
 
@@ -131,6 +131,14 @@ REST_FRAMEWORK = {
     ]
 }
 
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'authentication.serializers.ExtendedRegisterSerializer',
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomUserSerializer',
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -161,7 +169,6 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USER_DISPLAY = 'authentication.helpers.user_display'
-ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
 
 try:
     from .local_settings import *
