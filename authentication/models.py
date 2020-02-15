@@ -14,7 +14,7 @@ PROFILE_STATUS = (
 
 class CustomerProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile')
-    phone = models.CharField(max_length=11)
+    phone = models.CharField(max_length=15)
 
     def __str__(self):
         return self.user.first_name
@@ -25,7 +25,7 @@ class CustomerProfile(models.Model):
 
 class ChefProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='chef_profile')
-    phone = models.CharField(max_length=11)
+    phone = models.CharField(max_length=15)
     percentage = models.FloatField(null=True)
     rating = models.FloatField(default=0.0)
     votes_count = models.IntegerField(default=0)
