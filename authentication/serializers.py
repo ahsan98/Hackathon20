@@ -5,18 +5,6 @@ from django.contrib.auth import get_user_model
 from .models import CustomerProfile, ChefProfile
 
 
-class CustomerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomerProfile
-        fields = ('phone',)
-
-
-class ChefSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChefProfile
-        fields = ('phone', 'rating', 'votes_count', 'amount_due', 'status', 'specialities')
-
-
 class ExtendedRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=False)
