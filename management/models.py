@@ -16,13 +16,14 @@ class Speciality(models.Model):
     def __str__(self):
         return self.name
 
+
 class Kitchen(models.Model):
     name = models.CharField(max_length=100)
-    max_cooks = models.IntegerField()
     # TODO: location to be added
 
     def __str__(self):
         return self.name
+
 
 class Shift(models.Model):
     chef = models.ForeignKey("authentication.ChefProfile", on_delete = models.CASCADE, related_name="shifts")
@@ -32,4 +33,4 @@ class Shift(models.Model):
     status = models.CharField(choices=SHIFTS_STATUS, default='PENDING', max_length=10)
 
 # TODO: Checkin and checkout table
- 
+
