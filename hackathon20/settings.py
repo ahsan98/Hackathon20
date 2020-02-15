@@ -25,7 +25,7 @@ SECRET_KEY = '1)i9_vmmtl9w_)4h5=sms#m)sfn@7$-!u_7k!3+f_gyf_(8!(k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.105.9.247', '127.0.0.1']
+ALLOWED_HOSTS = ['10.105.9.247', 'localhost']
 
 SITE_ID = 1
 
@@ -122,8 +122,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
 
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'

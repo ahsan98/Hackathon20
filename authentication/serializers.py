@@ -3,6 +3,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import UserDetailsSerializer
 from django.contrib.auth import get_user_model
 from .models import CustomerProfile, ChefProfile
+from api.serializers import CustomerSerializer, ChefSerializer
 
 
 class ExtendedRegisterSerializer(RegisterSerializer):
@@ -40,12 +41,11 @@ class CustomUserSerializer(UserDetailsSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=False)
     email = serializers.EmailField(required=True)
-    phone = serializers.CharField(required=True, write_only=True)
-    customer_profile = serializers.PrimaryKeyRelatedField(read_only=True)
-    chef_profile = serializers.PrimaryKeyRelatedField(read_only=True)
+    customer_profile = CustomerSerializer(read_only=True)
+    chef_profile = ChefSerializer(read_only=True)
 
     class Meta:
-        fields = ('first_name', 'last_name', 'email', 'phone', 'chef_profile', 'customer_profile')
+        fields = ('first_name', 'last_name', 'email', 'chef_profile', 'customer_profile')
         model = get_user_model()
 
     def get_cleaned_data(self):
@@ -54,9 +54,5 @@ class CustomUserSerializer(UserDetailsSerializer):
         data_dict['first_name'] = self.validated_data.get('first_name', '')
         data_dict['last_name'] = self.validated_data.get('last_name', '')
         data_dict['email'] = self.validated_data.get('email', '')
-        data_dict['phone'] = self.validated_data.get('phone', '')
 
         return data_dict
-
-    def save(self, **kwargs):
-        pass

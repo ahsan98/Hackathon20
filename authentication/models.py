@@ -26,12 +26,12 @@ class CustomerProfile(models.Model):
 class ChefProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='chef_profile')
     phone = models.CharField(max_length=15)
-    percentage = models.FloatField(null=True)
+    percentage = models.FloatField(null=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
     rating = models.FloatField(default=0.0)
     votes_count = models.IntegerField(default=0)
     status = models.CharField(choices=PROFILE_STATUS, default='PENDING', max_length=10)
     amount_due = models.FloatField(default=0)
-    specialities = models.ManyToManyField(Speciality)
+    specialities = models.ManyToManyField(Speciality, blank=True)
 
     def __str__(self):
         return self.user.first_name

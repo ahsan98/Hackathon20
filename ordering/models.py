@@ -1,5 +1,5 @@
 from django.db import models
-from authentication.models import ChefProfile
+from authentication.models import ChefProfile, CustomerProfile
 from management.models import Kitchen
 
 ORDER_STATUS = (
@@ -10,8 +10,6 @@ ORDER_STATUS = (
 )
 
 
-# Create your models here.
-
 class Item(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
@@ -21,10 +19,12 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
+
 class Order(models.Model):
-    chef = models.OneToOneField(ChefProfile, on_delete=models.CASCADE, related_name="chefs_order")
-    kitchen = models.OneToOneField(Kitchen, on_delete=models.CASCADE, related_name = "kitchens_order")
-    items = models.ManyToManyField(Item)
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, related_name='orders')
+    chef = models.ForeignKey(ChefProfile, on_delete=models.CASCADE, related_name="orders")
+    kitchen = models.ForeignKey(Kitchen, on_delete=models.CASCADE, related_name = "orders")
+    items = models.ManyToManyField(Item, blank=True)
     status = models.CharField(choices=ORDER_STATUS, default='PENDING', max_length=10)
     total_price = models.FloatField()
 

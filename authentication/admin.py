@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from .models import CustomerProfile, ChefProfile
+from .models import CustomerProfile, ChefProfile, Vote
 from management.models import Shift
 
 User = get_user_model()
@@ -25,3 +25,5 @@ class CustomerAdmin(admin.ModelAdmin):
 
 admin.site.register(CustomerProfile, CustomerAdmin)
 admin.site.register(ChefProfile, ChefAdmin)
+
+admin.site.register(Vote)

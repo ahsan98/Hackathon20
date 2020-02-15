@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -13,44 +14,56 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+
     class Meta:
         model = CustomerProfile
-        fields = ('user', 'phone',)
+        fields = ('phone',)
 
 
 class ChefSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    rating = serializers.ReadOnlyField()
+    votes_count = serializers.ReadOnlyField()
+    amount_due = serializers.ReadOnlyField()
+    status = serializers.ReadOnlyField()
+
     class Meta:
         model = ChefProfile
-        fields = ('user', 'phone', 'rating', 'votes_count', 'amount_due', 'status', 'specialities')
+        fields = ('phone', 'rating', 'votes_count', 'amount_due', 'status', 'specialities')
+
 
 class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
-        fields = '__all__'
+        fields = ('rating', 'comment', 'chef')
+
 
 class KitchenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kitchen
         fields = ('name', 'max_cooks')
 
-class ShiftSerializer(serializers.Serializer):
+
+class ShiftSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shift
         fields = '__all__'
 
+
 class SpecialitySerializer(serializers.Serializer):
     class Meta:
         model = Speciality
-        fields = ('name')
+        fields = ('name', )
 
-class ItemSerializer(serializers.Serializer):
+
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = '__all__'
 
-class OrderSerializer(serializers.Serializer):
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = ItemSerializer(many=True)
+
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ('chef', 'kitchen', 'items', 'status')
