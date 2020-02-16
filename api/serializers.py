@@ -25,10 +25,11 @@ class ChefSerializer(serializers.ModelSerializer):
     votes_count = serializers.ReadOnlyField()
     amount_due = serializers.ReadOnlyField()
     status = serializers.ReadOnlyField()
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = ChefProfile
-        fields = ('phone', 'rating', 'votes_count', 'amount_due', 'status', 'specialities')
+        fields = ('phone', 'rating', 'votes_count', 'amount_due', 'status', 'specialities', 'user')
 
 
 class VoteSerializer(serializers.ModelSerializer):
@@ -37,28 +38,36 @@ class VoteSerializer(serializers.ModelSerializer):
         fields = ('rating', 'comment', 'chef')
 
 
-class KitchenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Kitchen
-        fields = ('name', 'max_cooks')
-
-
-class ShiftSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Shift
-        fields = '__all__'
-
-
-class SpecialitySerializer(serializers.Serializer):
-    class Meta:
-        model = Speciality
-        fields = ('name', )
-
-
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = '__all__'
+
+
+class ShiftSerializer(serializers.ModelSerializer):
+    status = serializers.ReadOnlyField()
+    chef = ChefSerializer(read_only=True)
+    id = serializers.ReadOnlyField()
+    menu_items_detailed = ItemSerializer(many=True, read_only=True)
+    kitchen_name = serializers.StringRelatedField()
+
+    class Meta:
+        model = Shift
+        fields = ('kitchen', 'start_time', 'end_time', 'status', 'menu_items', 'chef', 'id', 'menu_items_detailed', 'kitchen_name')
+
+
+class KitchenSerializer(serializers.ModelSerializer):
+    approved_shifts = ShiftSerializer(many=True)
+
+    class Meta:
+        model = Kitchen
+        fields = ('name', 'id', 'approved_shifts')
+
+
+class SpecialitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Speciality
+        fields = ('name', 'id')
 
 
 class OrderSerializer(serializers.ModelSerializer):
