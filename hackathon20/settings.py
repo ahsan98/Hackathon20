@@ -166,6 +166,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USER_DISPLAY = 'authentication.helpers.user_display'
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 try:
     from .local_settings import *
 except ImportError:
