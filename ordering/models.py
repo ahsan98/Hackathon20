@@ -34,3 +34,6 @@ class Order(models.Model):
 
     def __str__(self):
         return self.chef.user.first_name + "-" + str(self.pk)
+
+    def detailed_items(self):
+        return self.items

@@ -74,7 +74,8 @@ class SpecialitySerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     status = serializers.ReadOnlyField()
     id = serializers.ReadOnlyField()
+    detailed_items = ItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
-        fields = ('shift', 'chef', 'kitchen', 'items', 'status', 'id')
+        fields = ('shift', 'chef', 'kitchen', 'items', 'status', 'id', 'detailed_items')
