@@ -1,4 +1,5 @@
-from rest_framework import viewsets, mixins, generics
+from rest_framework import viewsets, mixins, generics, views
+from rest_framework.response import Response
 from authentication.models import ChefProfile, CustomerProfile, Vote, Speciality
 from .serializers import ChefSerializer, CustomerSerializer, VoteSerializer, ItemSerializer, OrderSerializer, \
     SpecialitySerializer, ShiftSerializer, KitchenSerializer
@@ -71,19 +72,20 @@ class OrderViewSet(generics.ListCreateAPIView):
 
     def get_queryset(self):
         if hasattr(self.request.user, 'customer_profile'):
-            return self.request.user.customer_profile.orders
+            return self.request.user.customer_profile.orders.order_by('-created_at')
         elif hasattr(self.request.user, 'chef_profile'):
-            return self.request.user.chef_profile.orders
+            return self.request.user.chef_profile.orders.order_by('-created_at')
 
     def perform_create(self, serializer):
         total_cost = 0
-        items = serializer.data.get('items')
+        items = serializer.validated_data.get('items')
         for item in items:
+            # item_obj = Item.objects.get(id=item)
             total_cost += item.price
 
-        order = serializer.save(customer=self.request.user, total_price=total_cost)
-        chef = order.chef
-        admin_percentage = (100.0 - chef.percentage)/100
+        order = serializer.save(customer=self.request.user.customer_profile, total_price=total_cost)
+        chef = serializer.validated_data.get('chef')
+        admin_percentage = (100.0 - (chef.percentage or 20.0))/100
         chef.amount_due += total_cost * admin_percentage
         chef.save()
         return order
@@ -92,6 +94,22 @@ class OrderViewSet(generics.ListCreateAPIView):
 class ItemViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
+
+
+class MarkComplete(views.APIView):
+
+    def post(self, request):
+        data = request.data
+        order_id = data.get('order')
+        order = Order.objects.filter(id=order_id)
+        if not len(order):
+            raise ValidationError({'order': 'Invalid order id'})
+        order = order[0]
+        order.status = 'COMPLETED'
+        order.save()
+
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)
 
 
 class SpecialityViewSet(viewsets.ReadOnlyModelViewSet):

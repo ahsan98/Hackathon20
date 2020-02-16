@@ -23,6 +23,7 @@ class Item(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, related_name='orders')
     chef = models.ForeignKey(ChefProfile, on_delete=models.CASCADE, related_name="orders")
+    shift = models.ForeignKey('management.Shift', on_delete=models.CASCADE, related_name="orders")
     kitchen = models.ForeignKey(Kitchen, on_delete=models.CASCADE, related_name="orders")
     items = models.ManyToManyField(Item, blank=True)
     status = models.CharField(choices=ORDER_STATUS, default='PENDING', max_length=10)
@@ -32,4 +33,4 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.chef.user.first_name + "-" + self.pk
+        return self.chef.user.first_name + "-" + str(self.pk)

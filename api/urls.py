@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from .views import ChefViewSet, CustomerViewSet, VoteViewSet, OrderViewSet, ItemViewSet, SpecialityViewSet, \
-    ShiftViewSet, KitchenViewSet
+    ShiftViewSet, KitchenViewSet, MarkComplete
 
 router = routers.DefaultRouter()
 router.register(r'vote', VoteViewSet)
@@ -15,6 +15,7 @@ urlpatterns = [
     path('auth/registration/', include('rest_auth.registration.urls')),
     path('chef/', ChefViewSet.as_view()),
     path('customer/', CustomerViewSet.as_view()),
+    path('order/complete/', MarkComplete.as_view()),
     path('order/', OrderViewSet.as_view()),
     path('', include(router.urls))
 ]

@@ -26,10 +26,11 @@ class ChefSerializer(serializers.ModelSerializer):
     amount_due = serializers.ReadOnlyField()
     status = serializers.ReadOnlyField()
     user = UserSerializer(read_only=True)
+    id = serializers.ReadOnlyField()
 
     class Meta:
         model = ChefProfile
-        fields = ('phone', 'rating', 'votes_count', 'amount_due', 'status', 'specialities', 'user')
+        fields = ('phone', 'rating', 'votes_count', 'amount_due', 'status', 'specialities', 'user', 'id')
 
 
 class VoteSerializer(serializers.ModelSerializer):
@@ -71,7 +72,9 @@ class SpecialitySerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    status = serializers.ReadOnlyField()
+    id = serializers.ReadOnlyField()
 
     class Meta:
         model = Order
-        fields = ('chef', 'kitchen', 'items', 'status')
+        fields = ('shift', 'chef', 'kitchen', 'items', 'status', 'id')
